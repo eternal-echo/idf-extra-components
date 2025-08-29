@@ -1,0 +1,103 @@
+menu "ISO-TP OTA Configuration"
+    menu "TWAI Basic Configuration"
+        config EXAMPLE_TX_GPIO_NUM
+            int "TX GPIO Number"
+            default 5
+            range 0 48
+            help
+                GPIO pin number for TWAI transmission.
+
+        config EXAMPLE_RX_GPIO_NUM
+            int "RX GPIO Number"
+            default 4
+            range 0 48
+            help
+                GPIO pin number for TWAI reception.
+
+        config EXAMPLE_BITRATE
+            int "TWAI Bitrate"
+            default 500000
+            range 25000 1000000
+            help
+                TWAI bitrate in bits per second.
+                Common values: 125000, 250000, 500000, 1000000
+
+        config EXAMPLE_TWAI_TX_QUEUE_DEPTH
+            int "TWAI TX Queue Length"
+            default 16
+            range 1 64
+            help
+                Length of the TWAI transmit queue.
+
+    endmenu
+
+    menu "ISO-TP Configuration"
+        config EXAMPLE_ISOTP_TX_ID
+            hex "TX Message ID"
+            default 0x7E8
+            help
+                TWAI ID for transmitting ISO-TP messages.
+
+        config EXAMPLE_ISOTP_RX_ID
+            hex "RX Message ID"
+            default 0x7E0
+            help
+                TWAI ID for receiving ISO-TP messages.
+
+        config EXAMPLE_ISOTP_TX_BUFFER_SIZE
+            int "ISO-TP TX Buffer Size"
+            default 4096
+            range 256 8192
+            help
+                Size of the ISO-TP transmission buffer.
+
+        config EXAMPLE_ISOTP_RX_BUFFER_SIZE
+            int "ISO-TP RX Buffer Size"
+            default 8192
+            range 1024 16384
+            help
+                Size of the ISO-TP reception buffer for OTA data.
+                Larger buffer helps with receiving firmware chunks.
+    endmenu
+
+    menu "OTA Task Configuration"
+        config EXAMPLE_OTA_TASK_STACK_SIZE
+            int "OTA Task Stack Size"
+            default 8192
+            range 4096 32768
+            help
+                Stack size for the OTA task. Increased for flash operations.
+
+        config EXAMPLE_OTA_TASK_PRIORITY
+            int "OTA Task Priority"
+            default 5
+            range 1 25
+            help
+                FreeRTOS priority for the OTA task (higher than poll task).
+
+        config EXAMPLE_OTA_POLL_DELAY_MS
+            int "OTA Poll Interval (ms)"
+            default 1
+            range 1 100
+            help
+                Delay between consecutive ISO-TP protocol polls.
+    endmenu
+
+    menu "RingBuffer Configuration"
+        config EXAMPLE_RINGBUF_SIZE
+            int "RingBuffer Size (bytes)"
+            default 32768
+            range 8192 65536
+            help
+                Size of the ringbuffer for ISR-safe data transfer from ISO-TP callback to OTA task.
+                Should be large enough to handle multiple ISO-TP packets without overflow.
+                Recommended: 2-4x the ISO-TP RX buffer size.
+
+        config EXAMPLE_RINGBUF_OVERFLOW_PROTECTION
+            bool "Enable RingBuffer Overflow Protection"
+            default y
+            help
+                Enable logging and error handling when ringbuffer is full.
+                Helps debug if ringbuffer size is insufficient.
+    endmenu
+endmenu
