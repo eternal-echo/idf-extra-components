@@ -1,3 +1,4 @@
+## IDF Component Manager Manifest File
 dependencies:
   esp_isotp:
-    path: "../../.."
+    override_path: '../../../'

@@ -199,6 +199,10 @@ static esp_err_t isotp_ota_init(void)
  */
 void app_main(void)
 {
+    static uint8_t rx_buffer[4096];  /*!< Buffer for received data */
+    const TickType_t poll_delay = pdMS_TO_TICKS(CONFIG_EXAMPLE_OTA_POLL_DELAY_MS);
+    uint32_t rx_size;
+
     ESP_LOGI(TAG, "=== ISO-TP OTA Demo starting ===");
 
     const esp_partition_t *running = esp_ota_get_running_partition();
@@ -212,9 +216,6 @@ void app_main(void)
 
     ESP_LOGI(TAG, "ISO-TP OTA ready. Waiting for firmware data...");
 
-    const TickType_t poll_delay = pdMS_TO_TICKS(CONFIG_EXAMPLE_OTA_POLL_DELAY_MS);
-    uint8_t rx_buffer[4096];  /*!< Buffer for received data */
-    uint32_t rx_size;
 
     /* Main loop: poll for ISO-TP data and process OTA */
     while (1) {
