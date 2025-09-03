@@ -31,7 +31,10 @@ int isotp_user_send_can(const uint32_t arbitration_id, const uint8_t *data, cons
                        );
 
 /**
- * @brief user implemented, gets the amount of time passed since the last call in microseconds
+ * @brief User-implemented: return current monotonic time in microseconds.
+ *
+ * Must return a 32-bit timestamp in microseconds that monotonically increases
+ * (wrapping is expected). The library uses IsoTpTimeAfter() to handle wrap.
  */
 uint32_t isotp_user_get_us(void);
 
